@@ -94,7 +94,7 @@ class Window(tk.Tk):
             self.entry_current_iteration.delete(0, tk.END)
             self.entry_current_iteration.insert(0, str(iteration))
         self.update_idletasks()
-        self.after_id = self.after(1000, self.environment_updated)
+        self.after_id = self.after(5, self.environment_updated)
 
     def draw_environment(self, grid: np.ndarray) -> None:
         rows, columns = grid.shape

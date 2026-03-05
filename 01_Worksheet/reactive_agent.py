@@ -31,8 +31,8 @@ class ReactiveAgent:
     def decide(self, perception: Perception) -> Action:
         #return self.decide_a(perception)
         #return self.decide_b(perception)
-        return self.decide_c(perception)
-        # return self.decide_d(perception)
+        #return self.decide_c(perception)
+        return self.decide_d(perception)
 
     def execute(self, action: Action, environment) -> None:
         next_cell = None
@@ -101,12 +101,12 @@ class ReactiveAgent:
                 older_iteration = perception.e.last_iteration
                 action = Action.EAST
 
-        if perception.s is not None:
+        if perception.s is not None and not perception.s.has_wall:
             if perception.s.last_iteration < older_iteration:
                 older_iteration = perception.s.last_iteration
                 action = Action.SOUTH
 
-        if perception.w is not None:
+        if perception.w is not None and not perception.w.has_wall:
             if perception.w.last_iteration < older_iteration:
                 older_iteration = perception.w.last_iteration
                 action = Action.WEST
@@ -121,4 +121,26 @@ class ReactiveAgent:
         # tiebreaker, when more than one adjacent cell is dirty or if there are
         # no dirty adjacent cells.
 
-        return None
+        older_iteration = 99999999
+        action = None
+
+        if perception.n is not None and perception.n.dirty:
+            older_iteration = perception.n.last_iteration
+            action = Action.NORTH
+
+        if perception.e is not None and perception.e.dirty:
+            if perception.e.last_iteration < older_iteration:
+                older_iteration = perception.e.last_iteration
+                action = Action.EAST
+
+        if perception.s is not None and perception.s.dirty:
+            if perception.s.last_iteration < older_iteration:
+                older_iteration = perception.s.last_iteration
+                action = Action.SOUTH
+
+        if perception.w is not None and perception.w.dirty:
+            if perception.w.last_iteration < older_iteration:
+                older_iteration = perception.w.last_iteration
+                action = Action.WEST
+
+        return action if action is not None else self.decide_c(perception)
