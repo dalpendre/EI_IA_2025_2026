@@ -52,7 +52,7 @@ class Environment(threading.Thread):
         self.environment_updated()
         while self.iteration < self.num_iterations and self.thread_running:
             # Students should uncomment next line in exercise e)
-            # self.dirt_update()
+            self.dirt_update()
             self.agent.act(self)
             self.iteration += 1
             self.environment_updated()
